@@ -19,3 +19,8 @@ app = FastAPI(
 @app.get('/')
 async def hello_world():
     return 'Hello world!!'
+
+from backend.routes import all_routes
+
+for route in all_routes:
+    app.include_router(route)
