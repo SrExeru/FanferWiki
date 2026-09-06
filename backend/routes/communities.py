@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
 from services.database import session_manager, AsyncSession
-from models import Community
+from schemas import community_schemas
 from sqlalchemy import select
-from typing import Optional
+from models import Community
 
 community_router = APIRouter(
     prefix='/community',
     tags=['Communities']
 )
 
-@community_router.post('/new')
-async def create_community (name: str, display_name: str, description: Optional[str], db: AsyncSession = Depends(session_manager.get_session)):
+@community_router.post('/', response_model=community_schemas.CommunityData)
+async def create_community (create_request: community_schemas.CommunityCreate, db: AsyncSession = Depends(session_manager.get_session)):
     new_community = Community(
-        name = name,
-        display_name = display_name,
-        description = description
+        name = create_request.name,
+        display_name = create_request.display_name,
+        description = create_request.description
     )
     
     db.add(new_community)
@@ -23,7 +23,7 @@ async def create_community (name: str, display_name: str, description: Optional[
     
     return new_community
 
-@community_router.get('/{community_id}')
+@community_router.get('/{community_id}', response_model=community_schemas.CommunityData)
 async def get_community (community_id: int, db: AsyncSession = Depends(session_manager.get_session)):
     query = await db.execute(
             select(Community).where(Community.id == community_id)
@@ -39,8 +39,8 @@ async def get_community (community_id: int, db: AsyncSession = Depends(session_m
     
     return community
 
-@community_router.put('/{community_id}')
-async def edit_community (community_id: int, display_name: str, description: Optional[str], db: AsyncSession = Depends(session_manager.get_session)):
+@community_router.put('/{community_id}', response_model=community_schemas.CommunityData)
+async def edit_community (community_id: int, edit_request: community_schemas.CommunityEdit, db: AsyncSession = Depends(session_manager.get_session)):
     query = await db.execute(
         select(Community).where(Community.id == community_id)
     )
@@ -53,8 +53,8 @@ async def edit_community (community_id: int, display_name: str, description: Opt
             detail='Community not found.'
         )
     
-    community.display_name = display_name
-    community.description = description
+    community.display_name = edit_request.display_name
+    community.description = edit_request.description
     
     await db.commit()
     await db.refresh(community)
