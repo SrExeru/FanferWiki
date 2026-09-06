@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
-from backend.services.database import session_manager, AsyncSession
-from backend.models import Community
+from services.database import session_manager, AsyncSession
+from models import Community
 from sqlalchemy import select
 from typing import Optional
 

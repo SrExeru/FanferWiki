@@ -2,7 +2,7 @@ from typing import AsyncGenerator, Optional
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import AsyncAdaptedQueuePool
 from sqlalchemy.orm import DeclarativeBase
-from backend.config import DATABASE_URL
+from config import DATABASE_URL
 
 class SessionManager:
     def __init__(self) -> None:
@@ -26,7 +26,7 @@ class SessionManager:
         )
         
     async def load_models (self):
-        from backend.models import all_models
+        from models import all_models
         
         if self.engine is not None:
             async with self.engine.begin() as conn:

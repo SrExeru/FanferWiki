@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.services.database import session_manager, AsyncSession, Base
+from services.database import session_manager, AsyncSession, Base
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -20,7 +20,7 @@ app = FastAPI(
 async def hello_world():
     return 'Hello world!!'
 
-from backend.routes import all_routes
+from routes import all_routes
 
 for route in all_routes:
     app.include_router(route)

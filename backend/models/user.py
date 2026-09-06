@@ -1,4 +1,4 @@
-from backend.services.database import Base
+from services.database import Base
 from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy import String, Text
 from typing import Optional

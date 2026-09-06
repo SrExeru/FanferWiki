@@ -2,17 +2,29 @@ version: '3.8'
 
 services:
   web:
-    build: .
-    container_name: fafnerwiki_app
+    build: ./backend
+    container_name: fafnerwiki_backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app/backend
-    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+      - ./backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     env_file:
       - .env
     depends_on:
       - db
+
+  frontend:
+    build: ./frontend
+    container_name: fafnerwiki_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host
+    depends_on:
+      - web
 
   db:
     image: postgres:15-alpine
