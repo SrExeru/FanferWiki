@@ -1,11 +1,14 @@
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import MainLayout from './Layout/MainLayout';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
-    <>
-      <h1>FafnerWiki</h1>
-      <h2>Hello World</h2>
-    </>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path='/' element={<HomePage />}/>
+      </Route>
+    </Routes>
   )
 }
 

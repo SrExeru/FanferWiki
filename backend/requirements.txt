@@ -2,3 +2,4 @@ uvicorn
 fastapi
 sqlalchemy
 asyncpg
+pwdlib[argon2]

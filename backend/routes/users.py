@@ -17,6 +17,8 @@ async def register_user (register_request: user_schemas.UserCreate, db: AsyncSes
         password=register_request.password # To hash in the future
     )
     
+    new_user.hash_password()
+    
     db.add(new_user)
     await db.commit()
     await db.refresh(new_user)
@@ -57,6 +59,8 @@ async def edit_user (user_id: int, edit_request: user_schemas.UserEdit, db: Asyn
     user.email = edit_request.email
     user.password = edit_request.password
     user.biography = edit_request.biography
+    
+    user.hash_password()
     
     await db.commit()
     await db.refresh(user)
