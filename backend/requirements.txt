@@ -1,5 +1,7 @@
 uvicorn
 fastapi
+python-multipart
 sqlalchemy
 asyncpg
 pwdlib[argon2]
+cloudinary

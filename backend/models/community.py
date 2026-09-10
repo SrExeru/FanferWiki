@@ -10,3 +10,6 @@ class Community(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     display_name: Mapped[str] = mapped_column(String(50), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    
+    icon_url: Mapped[Optional[str]] = mapped_column(String(300))
+    icon_id: Mapped[Optional[str]] = mapped_column(String(300))

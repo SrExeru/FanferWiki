@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from services.database import session_manager, AsyncSession
 from schemas import community_schemas
 from sqlalchemy import select
+import cloudinary.uploader
 from models import Community
 
 community_router = APIRouter(
@@ -9,13 +10,44 @@ community_router = APIRouter(
     tags=['Communities']
 )
 
+# Community feed
+
+@community_router.get('/popular')
+async def popular_communities (db: AsyncSession = Depends(session_manager.get_session)):
+    query = await db.execute(
+        select(Community)
+    )
+
+    communities = query.scalars().all()
+    
+    for community in communities:
+        print(community)
+    
+    print("-", communities)
+    
+    return communities  
+
+# Community CRUD
+
 @community_router.post('/', response_model=community_schemas.CommunityData)
-async def create_community (create_request: community_schemas.CommunityCreate, db: AsyncSession = Depends(session_manager.get_session)):
+async def create_community (create_request: community_schemas.CommunityCreate = Depends(community_schemas.CommunityCreate.as_form), db: AsyncSession = Depends(session_manager.get_session)):
     new_community = Community(
         name = create_request.name,
         display_name = create_request.display_name,
         description = create_request.description
     )
+    
+    if create_request.icon:
+        icon = cloudinary.uploader.upload(
+            create_request.icon.file,
+            folder='icons'
+        )
+    
+    icon_url = icon.get('secure_url')
+    icon_id = icon.get('public_id')
+    
+    new_community.icon_url = icon_url
+    new_community.icon_id = icon_id
     
     db.add(new_community)
     await db.commit()
@@ -40,7 +72,7 @@ async def get_community (community_id: int, db: AsyncSession = Depends(session_m
     return community
 
 @community_router.put('/{community_id}', response_model=community_schemas.CommunityData)
-async def edit_community (community_id: int, edit_request: community_schemas.CommunityEdit, db: AsyncSession = Depends(session_manager.get_session)):
+async def edit_community (community_id: int, edit_request: community_schemas.CommunityEdit = Depends(community_schemas.CommunityEdit.as_form), db: AsyncSession = Depends(session_manager.get_session)):
     query = await db.execute(
         select(Community).where(Community.id == community_id)
     )
@@ -55,6 +87,20 @@ async def edit_community (community_id: int, edit_request: community_schemas.Com
     
     community.display_name = edit_request.display_name
     community.description = edit_request.description
+    
+    if edit_request.icon:
+        if community.icon_id:
+            cloudinary.uploader.upload(
+                edit_request.icon.file,
+                public_id=community.icon_id,
+                overwrite=True,
+                invalidate=True
+            )
+        else:
+            cloudinary.uploader.upload(
+                edit_request.icon.file,
+                folder='icons'
+            )
     
     await db.commit()
     await db.refresh(community)
@@ -74,6 +120,9 @@ async def delete_community (community_id: int, db: AsyncSession = Depends(sessio
             status_code=404,
             detail='Community not found.'
         )
+    
+    if community.icon_id:
+        cloudinary.uploader.destroy(community.icon_id)
         
     await db.delete(community)
     await db.commit()
