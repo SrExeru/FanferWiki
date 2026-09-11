@@ -6,12 +6,134 @@
 }
 
 #root {
-    max-width: 100%;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background-color: #111;
-    color: #fff;
-    gap: 5vh;
+  max-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #111;
+  color: #fff;
+  gap: 5vh;
+}
+
+header, main, footer {
+  background-color: #222;
+}
+
+header, footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 40px;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 10vh;
+  box-shadow: 0 0 10px 5px #0003;
+  z-index: 1000000;
+}
+
+.header_logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header_logo span {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.header_logo img {
+  height: 50px;
+}
+
+footer {
+  min-height: 10vh;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.main_full_screen {
+  width: 80vw;
+}
+
+.container {
+  background-color: #222;
+  padding: 20px 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 5px #0003;
+}
+
+h1 {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #fff;
+}
+
+a {
+  text-decoration: none;
+  color: #ffd700;
+}
+
+/* Forms */
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+label {
+  display: block;
+}
+
+.form_question {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+input {
+  display: block;
+}
+
+input[type='text'], input[type='email'], input[type='password'] {
+  background-color: #111;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #fff;
+  padding: 5px 10px;
+}
+
+button, input[type='submit'] {
+  padding: 10px 20px;
+  background-color: #ffd700;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  box-shadow: 0 0 10px 5px #0003;
+  transition: background-color 0.3s ease-in-out 0.1s;
+}
+
+button:hover, input[type='submit']:hover {
+  cursor: pointer;
+  background-color: #e4b300;
 }

@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import './MainLayout.css'
+import './OnlyFormLayout.css'
 
-function MainLayout () {
+function OnlyFormLayout () {
     return (
         <>
             <header>
@@ -13,7 +13,7 @@ function MainLayout () {
                 </div>
             </header>
 
-            <main className='container main_full_screen'>
+            <main className='container'>
                 <Outlet />
             </main>
 
@@ -24,4 +24,4 @@ function MainLayout () {
     )
 }
 
-export default MainLayout;
+export default OnlyFormLayout;
