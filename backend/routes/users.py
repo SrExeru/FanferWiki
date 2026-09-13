@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from services.database import session_manager, AsyncSession
+from services.database import session_manager, DBSession
 from sqlalchemy import select
 from models import User
 from schemas import user_schemas
@@ -10,7 +10,7 @@ user_router = APIRouter(
 )
 
 @user_router.post('/', response_model=user_schemas.UserData)
-async def register_user (register_request: user_schemas.UserCreate, db: AsyncSession = Depends(session_manager.get_session)):
+async def register_user (register_request: user_schemas.UserCreate, db: DBSession = Depends(session_manager.get_session)):
     new_user = User(
         username=register_request.username,
         email=register_request.email,
@@ -26,12 +26,8 @@ async def register_user (register_request: user_schemas.UserCreate, db: AsyncSes
     return new_user
 
 @user_router.get('/{user_id}', response_model=user_schemas.UserData)
-async def get_user (user_id: int, db: AsyncSession = Depends(session_manager.get_session)):
-    query = await db.execute(
-        select(User).where(User.id == user_id)
-    )
-    
-    user = query.scalars().first()
+async def get_user (user_id: int, db: DBSession = Depends(session_manager.get_session)):
+    user = await db.select(User).where(User.id == user_id).scalar_one_or_none()
     
     if not user:
         raise HTTPException(
@@ -42,12 +38,8 @@ async def get_user (user_id: int, db: AsyncSession = Depends(session_manager.get
     return user
 
 @user_router.put('/{user_id}', response_model=user_schemas.UserData)
-async def edit_user (user_id: int, edit_request: user_schemas.UserEdit, db: AsyncSession = Depends(session_manager.get_session)):
-    query = await db.execute(
-        select(User).where(User.id == user_id)
-    )
-    
-    user = query.scalars().first()
+async def edit_user (user_id: int, edit_request: user_schemas.UserEdit, db: DBSession = Depends(session_manager.get_session)):
+    user = await db.select(User).where(User.id == user_id).scalar_one_or_none()
     
     if not user:
         raise HTTPException(
@@ -68,12 +60,8 @@ async def edit_user (user_id: int, edit_request: user_schemas.UserEdit, db: Asyn
     return user
 
 @user_router.delete('/{user_id}')
-async def delete_user (user_id: int, db: AsyncSession = Depends(session_manager.get_session)):
-    query = await db.execute(
-        select(User).where(User.id == user_id)
-    )
-    
-    user = query.scalars().first()
+async def delete_user (user_id: int, db: DBSession = Depends(session_manager.get_session)):
+    user = await db.select(User).where(User.id == user_id).scalar_one_or_none()
     
     if not user:
         raise HTTPException(
