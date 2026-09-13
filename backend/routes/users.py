@@ -1,31 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from services.database import session_manager, DBSession
-from sqlalchemy import select
 from models import User
-from schemas import user_schemas
+from schemas.users import UserData, UserEdit
 
 user_router = APIRouter(
     prefix='/user',
     tags=['Users']
 )
 
-@user_router.post('/', response_model=user_schemas.UserData)
-async def register_user (register_request: user_schemas.UserCreate, db: DBSession = Depends(session_manager.get_session)):
-    new_user = User(
-        username=register_request.username,
-        email=register_request.email,
-        password=register_request.password # To hash in the future
-    )
-    
-    new_user.hash_password()
-    
-    db.add(new_user)
-    await db.commit()
-    await db.refresh(new_user)
-    
-    return new_user
-
-@user_router.get('/{user_id}', response_model=user_schemas.UserData)
+@user_router.get('/{user_id}', response_model=UserData)
 async def get_user (user_id: int, db: DBSession = Depends(session_manager.get_session)):
     user = await db.select(User).where(User.id == user_id).scalar_one_or_none()
     
@@ -37,8 +20,8 @@ async def get_user (user_id: int, db: DBSession = Depends(session_manager.get_se
     
     return user
 
-@user_router.put('/{user_id}', response_model=user_schemas.UserData)
-async def edit_user (user_id: int, edit_request: user_schemas.UserEdit, db: DBSession = Depends(session_manager.get_session)):
+@user_router.put('/{user_id}', response_model=UserData)
+async def edit_user (user_id: int, edit_request: UserEdit, db: DBSession = Depends(session_manager.get_session)):
     user = await db.select(User).where(User.id == user_id).scalar_one_or_none()
     
     if not user:
@@ -55,7 +38,6 @@ async def edit_user (user_id: int, edit_request: user_schemas.UserEdit, db: DBSe
     user.hash_password()
     
     await db.commit()
-    await db.refresh(user)
     
     return user
 

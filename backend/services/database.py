@@ -3,8 +3,7 @@ from sqlalchemy.pool import AsyncAdaptedQueuePool
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.sql.expression import ColumnElement, Select
 from sqlalchemy import select
-from pydantic import BaseModel
-from typing import AsyncGenerator, Optional, Generic, Self, TypeVar, Sequence, Union, Type, Any, overload
+from typing import AsyncGenerator, Optional, Generic, Self, TypeVar, Sequence, Any, overload
 from config import DATABASE_URL
 
 class Base(DeclarativeBase):
@@ -57,11 +56,7 @@ class DBSession():
     
     async def commit(self) -> None:
         await self.session.commit()
-        
-    async def refresh(self, *instances: object) -> None:
-        for instance in instances:
-            await self.session.refresh(instance)
-    
+
     async def delete(self, *instances: object) -> None:
         for instance in instances:
             await self.session.delete(instance)

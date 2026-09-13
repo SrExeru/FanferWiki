@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import CommunityCard from '../../components/CommunityCard';
+import CommunityCard from '../../components/CommunityCard/CommunityCard.jsx';
 import api from '../../services/api.js';
 import './HomePage.css';
 

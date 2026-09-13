@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import './OnlyFormLayout.css'
 
-function OnlyFormLayout () {
+function OnlyFormLayout() {
     return (
         <>
             <header>

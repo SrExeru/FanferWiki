@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from services.database import session_manager, DBSession
-from schemas import community_schemas
-from sqlalchemy import select
+from schemas.communities import CommunityCreate, CommunityData, CommunityEdit
 import cloudinary.uploader
 from models import Community
 
@@ -15,18 +14,15 @@ community_router = APIRouter(
 @community_router.get('/popular')
 async def popular_communities (db: DBSession = Depends(session_manager.get_session)):
     communities = await db.select(Community).all()
-
-    for community in communities:
-        print(community)
     
-    print("-", communities)
+    # pending
     
     return communities  
 
 # Community CRUD
 
-@community_router.post('/', response_model=community_schemas.CommunityData)
-async def create_community (create_request: community_schemas.CommunityCreate = Depends(community_schemas.CommunityCreate.as_form), db: DBSession = Depends(session_manager.get_session)):
+@community_router.post('/', response_model=CommunityData)
+async def create_community (create_request: CommunityCreate = Depends(CommunityCreate.as_form), db: DBSession = Depends(session_manager.get_session)):
     new_community = Community(
         name = create_request.name,
         display_name = create_request.display_name,
@@ -47,11 +43,10 @@ async def create_community (create_request: community_schemas.CommunityCreate = 
     
     db.add(new_community)
     await db.commit()
-    await db.refresh(new_community)
     
     return new_community
 
-@community_router.get('/{community_id}', response_model=community_schemas.CommunityData)
+@community_router.get('/{community_id}', response_model=CommunityData)
 async def get_community (community_id: int, db: DBSession = Depends(session_manager.get_session)):
     community = await db.select(Community).where(Community.id == community_id).scalar_one_or_none()
         
@@ -63,8 +58,8 @@ async def get_community (community_id: int, db: DBSession = Depends(session_mana
     
     return community
 
-@community_router.put('/{community_id}', response_model=community_schemas.CommunityData)
-async def edit_community (community_id: int, edit_request: community_schemas.CommunityEdit = Depends(community_schemas.CommunityEdit.as_form), db: DBSession = Depends(session_manager.get_session)):
+@community_router.put('/{community_id}', response_model=CommunityData)
+async def edit_community (community_id: int, edit_request: CommunityEdit = Depends(CommunityEdit.as_form), db: DBSession = Depends(session_manager.get_session)):
     community = await db.select(Community).where(Community.id == community_id).scalar_one_or_none()
     
     if not community:
@@ -91,7 +86,6 @@ async def edit_community (community_id: int, edit_request: community_schemas.Com
             )
     
     await db.commit()
-    await db.refresh(community)
     
     return community
 
