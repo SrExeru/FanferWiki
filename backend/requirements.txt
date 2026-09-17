@@ -5,3 +5,4 @@ sqlalchemy
 asyncpg
 pwdlib[argon2]
 cloudinary
+pyjwt

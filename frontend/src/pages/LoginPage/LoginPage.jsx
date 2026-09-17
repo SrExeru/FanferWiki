@@ -13,6 +13,7 @@ function LoginPage() {
 
         try {
             const access_token = await api.post('/auth/login', formData);
+            localStorage.setItem('access_token', access_token.data)
             console.log(access_token.data);
         } catch (error) {
             setLoginError(error)

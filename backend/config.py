@@ -12,6 +12,9 @@ def required_env (key: str) -> str:
 DATABASE_URL = required_env('DATABASE_URL')
 FRONTEND_URL = required_env('FRONTEND_URL')
 
+JWT_SECRET = required_env('JWT_SECRET')
+JWT_ALGORITHM = getenv('JWT_ALGORITHM', 'HS256')
+
 @dataclass
 class CloudinaryConfig:
     CLOUDINARY_CLOUD_NAME: Optional[str] = getenv('CLOUDINARY_CLOUD_NAME')
