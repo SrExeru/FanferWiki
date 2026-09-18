@@ -65,9 +65,7 @@ async def auth_user (credentials: HTTPAuthorizationCredentials = Depends(request
     
     if access_token.startswith("Bearer "):
         access_token = access_token.split(" ")[1]
-    
-    print('--------', access_token)
-    
+
     payload = decode_jwt(access_token)
     
     user_id = payload.get('sub')
