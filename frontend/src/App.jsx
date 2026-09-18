@@ -6,12 +6,14 @@ import OnlyFormLayout from './Layout/OnlyFormLayout/OnlyFormLayout.jsx';
 import HomePage from './pages/HomePage/HomePage.jsx';
 import LoginPage from './pages/LoginPage/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage/RegisterPage.jsx';
+import PanelPage from './pages/PanelPage/PanelPage.jsx';
 
 function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
         <Route path='/' element={<HomePage />}/>
+        <Route path='/panel' element={<PanelPage />}/>
       </Route>
       <Route element={<OnlyFormLayout />}>
         <Route path='/login' element={<LoginPage />}/>

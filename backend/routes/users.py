@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, Cookie, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from services.database import session_manager, DBSession
 from models import User
 from schemas.users import UserData, UserEdit
 
-from services.security import decode_jwt
+from services.security import auth_user
+from typing import Annotated
 
 user_router = APIRouter(
     prefix='/user',
@@ -11,11 +12,7 @@ user_router = APIRouter(
 )
 
 @user_router.get('/@me', response_model=UserData)
-async def get_me (access_token: str, db: DBSession = Depends(session_manager.get_session)):
-    payload = decode_jwt(access_token)
-    
-    user = await db.select(User).where(User.id == int(payload['sub'])).scalar_one_or_none()
-        
+async def get_me (user: User = Depends(auth_user)):
     if not user:
         raise HTTPException(
             status_code=404,
