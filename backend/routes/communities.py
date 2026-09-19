@@ -9,6 +9,21 @@ community_router = APIRouter(
     tags=['Communities']
 )
 
+# User tools
+
+@community_router.get('/search', response_model=list[CommunityData])
+async def search_community(query: str, db: DBSession = Depends(session_manager.get_session)):
+    communities = await db.select(Community).where(Community.display_name.ilike(f'%{query}%')).all()
+    
+    result = []
+    
+    for community in communities:
+        result.append(
+            CommunityData.model_validate(community)
+        )
+    
+    return communities
+
 # Community feed
 
 @community_router.get('/popular')

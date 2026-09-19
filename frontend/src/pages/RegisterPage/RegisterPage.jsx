@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api.js';
 import './RegisterPage.css'
 
 function RegisterPage() {
+    const navigate = useNavigate();
     const [registerError, setRegisterError] = useState(null);
 
     const HandleRegisterForm = async (e) => {
@@ -13,7 +15,8 @@ function RegisterPage() {
 
         try {
             const access_token = await api.post('/auth/register', formData);
-            console.log(access_token.data);
+            localStorage.setItem('access_token', access_token.data);
+            navigate('/panel');
         } catch (e) {
             console.error('Register error:', e);
             setRegisterError(e)
@@ -24,7 +27,7 @@ function RegisterPage() {
     return (
         <>
             <h1>Register</h1>
-            <form onSubmit={HandleRegisterForm}>
+            <form className='column_form' onSubmit={HandleRegisterForm}>
                 <div className="form_question">
                     <label htmlFor="username">Username</label>
                     <input type="text" name="username" id="username" required={true}/>

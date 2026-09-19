@@ -1,5 +1,5 @@
 from fastapi import Form, UploadFile, File
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, Self
 
 class CommunityData(BaseModel):
@@ -10,6 +10,8 @@ class CommunityData(BaseModel):
     icon_url: Optional[str]
     
     description: Optional[str]
+    
+    model_config = ConfigDict(from_attributes=True)
     
     
     

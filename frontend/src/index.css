@@ -53,6 +53,14 @@ header {
   height: 50px;
 }
 
+.nav_search {
+  display: flex;
+}
+
+.nav_search input[type='submit'] { 
+  border-radius: 0 10px 10px 0;
+}
+
 footer {
   min-height: 10vh;
 }
@@ -90,7 +98,7 @@ a {
 
 /* Forms */
 
-form {
+.column_form {
   width: 100%;
   display: flex;
   flex-direction: column;

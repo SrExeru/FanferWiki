@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api.js';
 import './LoginPage.css';
 
 function LoginPage() {
+    const navigate = useNavigate();
     const [loginError, setLoginError] = useState(null);
 
     const handleLogin = async (e) => {
@@ -13,8 +15,8 @@ function LoginPage() {
 
         try {
             const access_token = await api.post('/auth/login', formData);
-            localStorage.setItem('access_token', access_token.data)
-            console.log(access_token.data);
+            localStorage.setItem('access_token', access_token.data);
+            navigate('/panel');
         } catch (error) {
             setLoginError(error)
             console.log('Login error:', error);
@@ -24,7 +26,7 @@ function LoginPage() {
     return (
         <>
             <h1>Login</h1>
-            <form onSubmit={handleLogin}>
+            <form className='column_form' onSubmit={handleLogin}>
                 <div className="form_question">
                     <label htmlFor="email">Email</label>
                     <input type="email" name="email" id="email" required={true}/>
