@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import UserMenu from "./UserMenu.jsx";
+import SearchIcon from '../assets/icons/SearchIcon.svg?react';
 
 function Navbar () {
     const navigate = useNavigate();
@@ -17,18 +19,24 @@ function Navbar () {
 
     return (
         <header>
-            <div className='header_logo'>
+            <a href="/" className='header_logo'>
                 <img src="/logo.png" alt="Fafner Wiki Logo" />
                 <span>
                     FafnerWiki
                 </span>
-            </div>
+            </a>
 
-            <form className="nav_search" onSubmit={handleSearch}>
-                <input type="text" name="query" placeholder="Search communities" required={true}/>
-                <input type="submit" value="🔎" />
-            </form>
-            
+            <nav>
+                <form className="nav_search" onSubmit={handleSearch}>
+                    <input type="text" name="query" placeholder="Search communities" required={true}/>
+                    <button>
+                        <SearchIcon className="primary_color_icon" id="header_search_btn" />
+                    </button>
+                </form>
+                
+                <UserMenu />
+
+            </nav>
         </header>
     )
 }

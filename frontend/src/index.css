@@ -5,19 +5,27 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+:root {
+  --bg-base: #111111;
+  --main-bg-color: #222222;
+  --text-color: #F3F3F3;
+  --primary-color: #FFC100;
+  --primary-color-hover: #E0A800;
+}
+
 #root {
   max-width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #111;
-  color: #fff;
+  background-color: var(--bg-base);
+  color: var(--text-color);
   gap: 5vh;
 }
 
 header, main, footer {
-  background-color: #222;
+  background-color: var(--main-bg-color);
 }
 
 header, footer {
@@ -38,10 +46,17 @@ header {
   z-index: 1000000;
 }
 
+nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
 .header_logo {
   display: flex;
   align-items: center;
   gap: 10px;
+  color: var(--text-color);
 }
 
 .header_logo span {
@@ -57,8 +72,53 @@ header {
   display: flex;
 }
 
-.nav_search input[type='submit'] { 
+.nav_search button { 
   border-radius: 0 10px 10px 0;
+  padding: 5px 15px;
+  justify-content: center;
+  align-content: center;
+}
+
+#header_search_btn {
+  fill: var(--bg-base);
+  width: 25px;
+  height: 25px;
+}
+
+.user_menu_container {
+  position: relative;
+}
+
+#user_menu_options {
+  position: absolute;
+  padding: 10px 10px;
+  width: 150px;
+  right: 30px;
+  top: 30px;
+  color: var(--text-color);
+  border-radius: 10px 0 10px 10px;
+}
+
+#user_menu_options h5 {
+  width: 100%;
+  font-size: 15px;
+  padding-bottom: 5px;
+  text-align: center;
+  border-bottom: 1px solid var(--text-color);
+}
+
+#user_menu_options li {
+  list-style: none;
+  width: 100%;
+}
+
+#user_menu_options li a {
+  display: block;
+  width: 100%;
+  color: var(--text-color);
+  padding: 10px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--text-color);
 }
 
 footer {
@@ -78,7 +138,7 @@ main {
 }
 
 .container {
-  background-color: #222;
+  background-color: var(--main-bg-color);
   padding: 20px 40px;
   border-radius: 20px;
   box-shadow: 0 0 10px 5px #0003;
@@ -88,12 +148,12 @@ h1 {
   width: 100%;
   text-align: center;
   padding-bottom: 10px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid var(--text-color);
 }
 
 a {
   text-decoration: none;
-  color: #ffd700;
+  color: var(--primary-color);
 }
 
 /* Forms */
@@ -123,16 +183,16 @@ input {
 }
 
 input[type='text'], input[type='email'], input[type='password'] {
-  background-color: #111;
-  color: #fff;
+  background-color: var(--bg-base);
+  color: var(--text-color);
   border: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid var(--text-color);
   padding: 5px 10px;
 }
 
 button, input[type='submit'] {
   padding: 10px 20px;
-  background-color: #ffd700;
+  background-color: var(--primary-color);
   border: none;
   border-radius: 10px;
   font-weight: bold;
@@ -147,5 +207,33 @@ input[type='text']:focus, input[type='email']:focus, input[type='password']:focu
 
 button:hover, input[type='submit']:hover {
   cursor: pointer;
-  background-color: #e4b300;
+  background-color: var(--primary-color-hover);
 }
+
+.empty_button {
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.empty_button:hover {
+  background: none;
+}
+
+.primary_color_icon, .pickable_icon {
+  width: 40px;
+  height: 40px;
+  fill: var(--primary-color);
+}
+
+.pickable_icon {
+  transition: fill 0.3s ease-in-out 0.1s;
+}
+
+.pickable_icon:hover {
+  cursor: pointer;
+  fill: var(--primary-color-hover);
+}
+

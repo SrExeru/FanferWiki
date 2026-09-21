@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage/RegisterPage.jsx';
 import PanelPage from './pages/PanelPage/PanelPage.jsx';
 import SearchPage from './pages/SearchPage/SearchPage.jsx';
 import CommunityPage from './pages/CommunityPage/CommunityPage.jsx';
+import ProfilePage from './pages/ProfilePage/ProfilePage.jsx';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element={<HomePage />}/>
         <Route path='/panel' element={<PanelPage />}/>
         <Route path='/community/:slug' element={<CommunityPage /> } />
+        <Route path='/profile' element={<ProfilePage /> } />
       </Route>
 
       <Route element={<SearchLayout />}>
