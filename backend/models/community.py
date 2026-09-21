@@ -7,7 +7,7 @@ class Community(Base):
     __tablename__ = 'communities'
     
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    slug: Mapped[str] = mapped_column(String(50), index=True, nullable=False, unique=True)
     display_name: Mapped[str] = mapped_column(String(50), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     

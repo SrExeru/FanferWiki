@@ -4,7 +4,6 @@ from models import User
 from schemas.users import UserData, UserEdit
 
 from services.security import auth_user
-from typing import Annotated
 
 user_router = APIRouter(
     prefix='/user',

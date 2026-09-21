@@ -1,6 +1,6 @@
 import './CommunityCard.css'
 
-function CommunityCard({ display_name, icon_url, description }) {
+function CommunityCard({ slug, display_name, icon_url, description }) {
     return (
         <div className='community_card'>
             <img src={ icon_url } alt={`${display_name}'s logo`} />
@@ -10,6 +10,7 @@ function CommunityCard({ display_name, icon_url, description }) {
             <p>
                 { description }
             </p>
+            <a className='community_card_btn' href={`/community/${slug}`}>Enter</a>
         </div>
     )
 }

@@ -4,7 +4,7 @@ from typing import Optional, Self
 
 class CommunityData(BaseModel):
     id: int
-    name: str
+    slug: str
     display_name: str
     
     icon_url: Optional[str]
@@ -13,19 +13,17 @@ class CommunityData(BaseModel):
     
     model_config = ConfigDict(from_attributes=True)
     
-    
-    
 class CommunityCreate(BaseModel):
-    name: str
+    slug: str
     display_name: str
     description: Optional[str]
     
     icon: Optional[UploadFile] = File(None)
         
     @classmethod
-    def as_form (cls, name: str = Form(...), display_name: str = Form(...), description: Optional[str] = Form(...), icon: Optional[UploadFile] = File(None)) -> Self:
+    def as_form (cls, slug: str = Form(...), display_name: str = Form(...), description: Optional[str] = Form(...), icon: Optional[UploadFile] = File(None)) -> Self:
         return cls(
-            name=name,
+            slug=slug,
             display_name=display_name,
             description=description,
             icon=icon

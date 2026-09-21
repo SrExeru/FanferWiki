@@ -37,6 +37,7 @@ function SearchPage () {
                 searchResults.map((community) => {
                     return <CommunityCard
                         key={community?.id}
+                        slug={community?.slug}
                         display_name={community?.display_name}
                         description={community?.description}
                         icon_url={community?.icon_url}

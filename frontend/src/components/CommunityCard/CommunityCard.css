@@ -15,3 +15,15 @@
 .community_card h3 {
     border-bottom: 1px solid #fff;
 }
+
+.community_card_btn {
+    padding: 10px 20px;
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    box-shadow: 0 0 10px 5px #0003;
+    transition: background-color 0.3s ease-in-out 0.1s;
+}

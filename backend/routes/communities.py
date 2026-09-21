@@ -39,7 +39,7 @@ async def popular_communities (db: DBSession = Depends(session_manager.get_sessi
 @community_router.post('/', response_model=CommunityData)
 async def create_community (create_request: CommunityCreate = Depends(CommunityCreate.as_form), db: DBSession = Depends(session_manager.get_session)):
     new_community = Community(
-        name = create_request.name,
+        slug = create_request.slug,
         display_name = create_request.display_name,
         description = create_request.description
     )
@@ -61,9 +61,9 @@ async def create_community (create_request: CommunityCreate = Depends(CommunityC
     
     return new_community
 
-@community_router.get('/{community_id}', response_model=CommunityData)
-async def get_community (community_id: int, db: DBSession = Depends(session_manager.get_session)):
-    community = await db.select(Community).where(Community.id == community_id).scalar_one_or_none()
+@community_router.get('/{community_slug}', response_model=CommunityData)
+async def get_community (community_slug: str, db: DBSession = Depends(session_manager.get_session)):
+    community = await db.select(Community).where(Community.slug == community_slug).scalar_one_or_none()
         
     if not community:
         raise HTTPException(
@@ -73,9 +73,9 @@ async def get_community (community_id: int, db: DBSession = Depends(session_mana
     
     return community
 
-@community_router.put('/{community_id}', response_model=CommunityData)
-async def edit_community (community_id: int, edit_request: CommunityEdit = Depends(CommunityEdit.as_form), db: DBSession = Depends(session_manager.get_session)):
-    community = await db.select(Community).where(Community.id == community_id).scalar_one_or_none()
+@community_router.put('/{community_slug}', response_model=CommunityData)
+async def edit_community (community_slug: str, edit_request: CommunityEdit = Depends(CommunityEdit.as_form), db: DBSession = Depends(session_manager.get_session)):
+    community = await db.select(Community).where(Community.slug == community_slug).scalar_one_or_none()
     
     if not community:
         raise HTTPException(
@@ -104,9 +104,9 @@ async def edit_community (community_id: int, edit_request: CommunityEdit = Depen
     
     return community
 
-@community_router.delete('/{community_id}')
-async def delete_community (community_id: int, db: DBSession = Depends(session_manager.get_session)):
-    community = await db.select(Community).where(Community.id == community_id).scalar_one_or_none()
+@community_router.delete('/{community_slug}')
+async def delete_community (community_slug: str, db: DBSession = Depends(session_manager.get_session)):
+    community = await db.select(Community).where(Community.slug == community_slug).scalar_one_or_none()
         
     if not community:
         raise HTTPException(
