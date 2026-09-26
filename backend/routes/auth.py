@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, Response, HTTPException
+from fastapi import APIRouter, Depends, Response, Cookie, HTTPException
 from services.database import session_manager, DBSession
 from models import User, Session
 from schemas.auth import RegisterData, LoginData
+from typing import Annotated
 
 from datetime import datetime, timezone, timedelta
 from services.security import encode_jwt, create_session
@@ -62,3 +63,57 @@ async def login (response: Response, login_request: LoginData = Depends(LoginDat
     )
         
     return session_data.access_token
+
+@auth_router.get('/refresh')
+async def refresh_session (response: Response, refresh_token: Annotated[str | None, Cookie()] = None, db: DBSession = Depends(session_manager.get_session)):
+    if not refresh_token:
+        raise HTTPException(
+            status_code=401,
+            detail='Invalid session.'
+        )
+    # This is horrible now, i will fix this later
+    session = await db.select(Session).where(Session.refresh_token == refresh_token).scalar_one_or_none()
+    
+    if not session:
+        raise HTTPException(
+            status_code=401,
+            detail='Invalid session.'
+        )
+        
+    new_session = create_session(session.user_id)
+    
+    await db.delete(session)
+    db.add(new_session.session)
+    
+    await db.commit()
+    
+    response.set_cookie(
+        key='refresh_token',
+        value=new_session.refresh_token,
+        httponly=True
+    )
+            
+    return new_session.access_token
+
+@auth_router.post('/logout')
+async def logout (response: Response, refresh_token: Annotated[str | None, Cookie()] = None, db: DBSession = Depends(session_manager.get_session)):
+    if not refresh_token:
+        raise HTTPException(
+            status_code=401,
+            detail='Invalid session.'
+        )
+    # This is horrible now, i will fix this later
+    session = await db.select(Session).where(Session.refresh_token == refresh_token).scalar_one_or_none()
+    
+    if not session:
+        raise HTTPException(
+            status_code=401,
+            detail='Invalid session.'
+        )
+    
+    await db.delete(session)
+    
+    await db.commit()
+    response.delete_cookie('refresh_token')
+
+    return 'Completed logout.'
