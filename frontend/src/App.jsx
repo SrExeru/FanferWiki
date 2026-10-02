@@ -13,6 +13,9 @@ import SearchPage from './pages/SearchPage/SearchPage.jsx';
 import CommunityPage from './pages/CommunityPage/CommunityPage.jsx';
 import ProfilePage from './pages/ProfilePage/ProfilePage.jsx';
 
+import ProtectedRoute from './Layout/ProtectedRoute.jsx';
+
+
 function App() {
   return (
     <Routes>
@@ -20,7 +23,10 @@ function App() {
         <Route path='/' element={<HomePage />}/>
         <Route path='/panel' element={<PanelPage />}/>
         <Route path='/community/:slug' element={<CommunityPage /> } />
-        <Route path='/profile' element={<ProfilePage /> } />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path='/profile' element={<ProfilePage /> } />
+        </Route>
 
         <Route path='/logout' element={<LogoutPage /> } />
       </Route>

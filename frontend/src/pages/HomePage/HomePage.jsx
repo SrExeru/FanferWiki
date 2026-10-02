@@ -10,11 +10,10 @@ function HomePage () {
     useEffect(() => {
         api.get('/community/popular')
             .then(response => {
-                console.log(response?.data)
-                setCommunities(response?.data)
+                setCommunities(response.data);
             })
             .catch(error => {
-                console.error(error)
+                console.error('Loading communities error:', error);
             })
             .finally(() => {
                 setCommunitiesLoading(false);

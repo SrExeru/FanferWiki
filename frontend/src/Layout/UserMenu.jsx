@@ -19,7 +19,7 @@ function UserMenu () {
                 setLoggenUser(true);
             })
             .catch(error => {
-                console.log('Loading user data error:', error);
+                console.error('Loading user data error:', error);
             })
             .finally(() => {
                 setLoadingUserData(false);

@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from services.database import DBSession, session_manager
 from models import User, Session
 from config import JWT_SECRET, JWT_ALGORITHM
-from jwt import encode, decode, ExpiredSignatureError
+from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
 from dataclasses import dataclass
 from datetime import datetime, timezone, timedelta
 
@@ -24,6 +24,11 @@ def decode_jwt(encoded_jwt: str) -> dict[str, str]:
             algorithms=[JWT_ALGORITHM]
         )
     except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=401,
+            detail='Invalid session.'
+        )
+    except InvalidTokenError:
         raise HTTPException(
             status_code=401,
             detail='Invalid session.'

@@ -25,32 +25,35 @@ api.interceptors.response.use(
     response => {
         return response;
     },
-    error => {
-        if (error.response && error.response.status == 401) {
+    async error => {
+        const originalRequest = error.config;
+
+        if (error.response?.status == 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
             let refreshedToken = false;
             try {
-                axios.get(`${ENV.BACKEND_URL}/auth/refresh`)
-                    .then(response => {
-                        localStorage.setItem('access_token', response.data);
-                        refreshedToken = true;
-                    });
+                response = await axios.get(
+                    `${ENV.BACKEND_URL}/auth/refresh`, {
+                    withCredentials: true
+                });
+
+                const newToken = response.data;
+
+                localStorage.setItem('access_token', newToken);
                 
-                    if (!refreshedToken) {
-                        return error;
-                    }
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-                    const originalRequest = error.config;
-                    originalRequest.headers.Authorization = `Bearer ${access_token}`;
-
-                    return axios(originalRequest);
+                return axios(originalRequest);
             } catch (refreshError) {
                 console.error('Refresh error:', refreshError);
+                localStorage.removeItem('access_token');
                 return Promise.reject(refreshError);
             }
             
         }
 
-        return Promise.reject(refreshError);
+        return Promise.reject(error);
     }
 )
 
